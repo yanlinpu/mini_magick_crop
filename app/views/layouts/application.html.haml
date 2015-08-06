@@ -1,0 +1,12 @@
+!!!
+%html{:lang => "en",  "xmlns:wb" => "http://open.weibo.com/wb"}
+  %head
+    %meta{:content => "width=device-width, initial-scale=1.0, user-scalable=no", :name => "viewport"}
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}
+    %meta{:content => "IE=edge,Chrome=1", "http-equiv" => "X-UA-Compatible"}
+    %meta{:content => "IE=9", "http-equiv" => "X-UA-Compatible"}
+    %title
+      = "crop test"
+    = javascript_include_tag "application"
+  %body
+    = content_for?(:content) ? yield(:content) : yield

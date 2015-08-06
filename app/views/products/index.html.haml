@@ -1,0 +1,118 @@
+%head
+  -#= stylesheet_link_tag 'publish'
+  = stylesheet_link_tag 'jquery.Jcrop.min'
+  = stylesheet_link_tag 'upload_compic'
+%body
+  .main.clearfix.clear
+    .main_r
+      .publish_r
+        %h3.common_t 发布产品
+        .pub_tab_c
+          .mod_publish_r
+            = form_tag products_path,role:'form',remote:true,method:'post',id:'form2',name:'form2' do
+              %ul.form.form_l
+                %li
+                  %label
+                    %em> *
+                    产品名称：
+                  %span
+                    = text_field_tag 'pro_name','',{class:'txt pro_name',id:'pro_name_2'}
+                %li
+                  %label
+                    %em> *
+                    所属企业：
+                  %span
+                    = text_field_tag 'company',params[:product][:company_name],{class:'txt product_company',id:'company_2'}
+                %li
+                  %label
+                    %em> *
+                    官网地址：
+                  %span
+                    = text_field_tag 'url',params[:product][:company_site],{class:'txt url',id: 'url_2',:placeholder=>'http://...'}
+              .imgbox
+                %img.edita#edita.pub_img{:pic_type=>'product_new',:alt => "img", :src => "/images/product_default_logo.jpg", :width=>216, :height=>160}/
+              %ul.form
+                %li
+                  %label
+                    %em> *
+                    是否收费：
+                  %span
+                    = radio_button_tag 'charge',false,true,{class:'radi'}
+                    %i.radi_txt 免费
+                    = radio_button_tag 'charge',true,false,{class:'radi'}
+                    %i.radi_txt 收费
+                %li.textarea
+                  %label
+                    %em> *
+                    产品简介：
+                  %span
+                    = text_area_tag 'pro','',{class:'pro_intro pro',id: 'pro_2'}
+                %li.rule 填写以下信息，便于您发布的产品被更精确的搜索到
+                %li.classify
+                  %label
+                    %em> *
+                    分类：
+                  %span.mark_category_1
+                    - first_cate = Category.first_categories
+                    = select_tag :category_l1_id, options_from_collection_for_select(first_cate, "id", "name"), class: "selct category_l1_id",id:'category_l1_id_2', include_blank: '请选择一级分类'
+                  %span.mark_category_2
+                    = select_tag :category_l2_id, options_from_collection_for_select((first_cate.empty? ? [] : first_cate.first.categories), "id", "name"), class: "selct", include_blank: '请选择二级分类'
+                %li.jishu
+                  %label
+                    %em> *
+                    技术领域：
+                  #divSearchTags_01.list_group2
+                    %input#insertTag_01.insertTag{:class=>'insertTag_2',:maxlength => "21", :name => "insertTag", :onkeydown => "enterTag_01()", :type => "text", :value => ""}/
+                    %input#OrganTag_01{:name => "OrganTag", :type => "hidden", :value => "dfsdfdsf, dsad, sdfsdf,java"}/
+                    %input#OldOrganTag_01{:name => "OldOrganTag", :type => "hidden", :value => ""}/
+                    %input{:name => "txtSearchTags", :type => "hidden"}/
+                    = hidden_field_tag 'tag_ids',''
+                    = hidden_field_tag 'tag_names',''
+                %li.b-recomend-tag
+                  %div{:style => "clear:both;overflow:hidden; font-size:12px; padding-left:98px; color:#999;margin:6px 0 0;"}
+                    标签间请用“空格”隔开，每个职位最多可添加5个不同的标签，每个标签最多20个字符（10个汉字）。
+                    -#.recomend-l 推荐标签
+                    -#.recomend-r{:style => "margin-left:95px;"}
+                    -#  %label.se_key java  ＋
+                %li#tabbox_tag_01.tagbox.tagbox_tag
+              .pub
+                = link_to_function '发布','submit_form(this)',{class:'pub_btn'}
+            -#= render :partial => 'publish_type_2'
+  #edit_compic.edit_compic
+    %form#picform{:action => "pic_upload_to_local", :enctype => "multipart/form-data", :method => "post"}
+      .closebox
+        %i.clos x
+      %label.up_pic_con{:for => "file"}
+        %a.select_pic{:href => "javascript:;"}
+          选择照片
+          %input#personpic.file{:name => "personpic", :type => "file"}/
+    %form{:action => "this", :method => "get"}
+      .upload_tip 仅支持JPG,GIF,PNG格式;文件小于5M
+      .pictures_con
+        .crop_pic
+          %img#cropbox/
+          %input#cropx{:name => "cropx", :type => "hidden"}/
+          %input#cropy{:name => "cropy", :type => "hidden"}/
+          %input#cropw{:name => "cropw", :type => "hidden"}/
+          %input#croph{:name => "croph", :type => "hidden"}/
+        .compic_view01
+          .compic_view01_con
+            %img#crop_view01/
+          .crop_tip01 240×160
+        .compic_view02
+          .compic_view02_con
+            %img#crop_view02/
+          .crop_tip02 180×120
+      .down_submit
+        %input.uppic_cancel#uppic_cancel{:type => "reset", :value => "取消"}
+        %input.uppic_ok#uppic_ok{:pic_type=>'product_new' ,:value => "保存"}
+        -#%input.uppic_ok#uppic_ok{:type => "submit", :value => "保存"}
+  / 下面三个为上传图片
+  = javascript_include_tag 'jquery.form'
+  = javascript_include_tag 'jquery.Jcrop'
+  = javascript_include_tag 'upload'
+:javascript
+
+  function submit_form(obj){
+    $(obj).parents('form').submit();
+  }

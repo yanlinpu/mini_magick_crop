@@ -1,0 +1,59 @@
+%head
+  -#= stylesheet_link_tag 'publish'
+  = stylesheet_link_tag 'jquery.Jcrop.min'
+  = stylesheet_link_tag 'upload_compic'
+%body
+  .main.clearfix.clear
+    .main_r
+      .publish_r
+        %h3.common_t 发布产品
+        .pub_tab_c
+          .mod_publish_r
+            = form_tag products_path,role:'form',remote:true,method:'post',id:'form',name:'form' do
+              %label
+                %em> *
+                产品名称：
+              %span
+                = text_field_tag 'pro_name','',{class:'txt pro_name',id:'pro_name'}
+              .imgbox
+                %img.edita#edita.pub_img{:pic_type=>'product_new',:alt => "img", :src => "/images/product_default_logo.jpg", :width=>216, :height=>160}/
+              -#.pub
+              -#  = link_to_function '发布','submit_form(this)',{class:'pub_btn'}
+  #edit_compic.edit_compic
+    %form#picform{:action => "pic_upload_to_local", :enctype => "multipart/form-data", :method => "post"}
+      .closebox
+        %i.clos x
+      %label.up_pic_con{:for => "file"}
+        %a.select_pic{:href => "javascript:;"}
+          选择照片
+          %input#personpic.file{:name => "personpic", :type => "file"}/
+    %form{:action => "this", :method => "get"}
+      .upload_tip 仅支持JPG,GIF,PNG格式;文件小于5M
+      .pictures_con
+        .crop_pic
+          %img#cropbox/
+          %input#cropx{:name => "cropx", :type => "hidden"}/
+          %input#cropy{:name => "cropy", :type => "hidden"}/
+          %input#cropw{:name => "cropw", :type => "hidden"}/
+          %input#croph{:name => "croph", :type => "hidden"}/
+        .compic_view01
+          .compic_view01_con
+            %img#crop_view01/
+          .crop_tip01 240×160
+        .compic_view02
+          .compic_view02_con
+            %img#crop_view02/
+          .crop_tip02 180×120
+      .down_submit
+        %input.uppic_cancel#uppic_cancel{:type => "reset", :value => "取消"}
+        %input.uppic_ok#uppic_ok{:pic_type=>'product_new' ,:value => "保存"}
+        -#%input.uppic_ok#uppic_ok{:type => "submit", :value => "保存"}
+  / 下面三个为上传图片
+  = javascript_include_tag 'jquery.form'
+  = javascript_include_tag 'jquery.Jcrop'
+  = javascript_include_tag 'upload'
+:javascript
+
+  function submit_form(obj){
+    $(obj).parents('form').submit();
+  }
