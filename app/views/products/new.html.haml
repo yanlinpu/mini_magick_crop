@@ -6,17 +6,18 @@
   .main.clearfix.clear
     .main_r
       .publish_r
-        %h3.common_t 发布产品
         .pub_tab_c
           .mod_publish_r
             = form_tag products_path,role:'form',remote:true,method:'post',id:'form',name:'form' do
-              %label
-                %em> *
-                产品名称：
-              %span
-                = text_field_tag 'pro_name','',{class:'txt pro_name',id:'pro_name'}
+              -#%label
+              -#  %em> *
+              -#  产品名称：
+              -#%span
+              -#  = text_field_tag 'pro_name','',{class:'txt pro_name',id:'pro_name'}
               .imgbox
                 %img.edita#edita.pub_img{:pic_type=>'product_new',:alt => "img", :src => "/images/product_default_logo.jpg", :width=>216, :height=>160}/
+              .imgbox
+                %img.edita#edita.pub_img{:pic_type=>'ProductPrincipal',:alt => "img", :src => "/images/face.png", :width=>100, :height=>100}/
               -#.pub
               -#  = link_to_function '发布','submit_form(this)',{class:'pub_btn'}
   #edit_compic.edit_compic

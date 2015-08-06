@@ -3,6 +3,7 @@ class ProductsController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => [:pic_upload_to_local,:pic_upload_to_crop]
   def new
 	  session[:image_url]=nil
+    session[:product_principal_url]=nil
   end
 
   def create
@@ -19,7 +20,11 @@ class ProductsController < ApplicationController
         FileUtils.mkdir_p(directory) unless File.exist?(directory)
         File.open(path, "wb") { |f| f.write(pic.read) }
         result = path[path.index('/')..-1]
-        session[:image_url] = result
+        if params[:pic_type].present? && params[:pic_type]=='ProductPrincipal'
+          session[:product_principal_url]= result
+        else
+          session[:image_url] = result
+        end
         render json: {success: true, url: result}
       else
         @message = '上传文件大小不能超过2MB'
@@ -32,8 +37,12 @@ class ProductsController < ApplicationController
   end
 
   def pic_upload_to_crop
-    image_url = params[:image_url] || session[:image_url] || '/images/product_default_logo.jpg'
-    if image_url == '/images/product_default_logo.jpg'
+    if params[:pic_type]=='ProductPrincipal'
+      image_url = session[:product_principal_url] || '/images/face.png'
+    else
+      image_url = session[:image_url] || '/images/product_default_logo.jpg'
+    end
+    if image_url == '/images/product_default_logo.jpg' || image_url == '/images/face.png'
       username = 'test'
       directory = "public/upload/#{username}"
       FileUtils.mkdir_p(directory) unless File.exist?(directory)
@@ -67,7 +76,11 @@ class ProductsController < ApplicationController
   end
 
   def product_logo
-    render json: {url: "#{session[:image_url] || '/images/product_default_logo.jpg'}"}
+    if params[:pic_type]=="ProductPrincipal"
+      render json: {url: "#{session[:product_principal_url] || '/images/face.png'}"}
+    else
+      render json: {url: "#{session[:image_url] || '/images/product_default_logo.jpg'}"}
+    end
   end
 
   private
