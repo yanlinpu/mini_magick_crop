@@ -4,6 +4,7 @@ Rails.application.routes.draw do
       get :product_logo
       post :pic_upload_to_local
       post :pic_upload_to_crop
+      get :testjsonp
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

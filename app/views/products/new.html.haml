@@ -54,7 +54,36 @@
   = javascript_include_tag 'jquery.Jcrop'
   = javascript_include_tag 'upload'
 :javascript
-
   function submit_form(obj){
     $(obj).parents('form').submit();
+  }
+  $(function(){
+    //$.getJSON('/products/testjsonp?callback=success_jsonpCallback', {
+    //  format: 'json',
+    //})
+    //.done(function( data ) {
+    //  console.log('jquery getjson test');
+    //})
+    //.fail(function(){
+    //  console.log('error')
+    //});
+    $.ajax({
+      dataType: 'jsonp',
+      type: 'GET',
+      data: {
+        tags: 'jsonptest'
+      },
+      url: '/products/testjsonp?callback=success_jsonpCallback',
+      jsonp: "callbackparam",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(默认为:callback)
+      jsonpCallback:"success_jsonpCallback",
+      success: function(data){
+        console.log('ajax jsonp test');
+      },
+      error: function(data){
+        console.log('error')
+      }
+    })
+  })
+  function success_jsonpCallback(data){
+    console.log(data.success)
   }

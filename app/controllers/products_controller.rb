@@ -1,6 +1,6 @@
 require 'mini_magick'
 class ProductsController < ApplicationController
-  skip_before_filter :verify_authenticity_token, :only => [:pic_upload_to_local,:pic_upload_to_crop]
+  #skip_before_filter :verify_authenticity_token, :only => [:pic_upload_to_local,:pic_upload_to_crop]
   def new
 	  session[:image_url]=nil
     session[:product_principal_url]=nil
@@ -80,6 +80,13 @@ class ProductsController < ApplicationController
       render json: {url: "#{session[:product_principal_url] || '/images/face.png'}"}
     else
       render json: {url: "#{session[:image_url] || '/images/product_default_logo.jpg'}"}
+    end
+  end
+
+  def testjsonp
+    p params[:callback]
+    respond_to do |format|
+      format.json { render :json => {success: 'testjsonp'}, :callback => params[:callback]}#"#{params[:callback]}(#{params[:tags]})" }
     end
   end
 
